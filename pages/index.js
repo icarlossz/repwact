@@ -1,4 +1,6 @@
 import 'isomorphic-fetch';
+import Link from 'next/link'
+import Layout from '../components/layout';
 
 export default class extends React.Component {
   static async getInitialProps() {
@@ -7,40 +9,27 @@ export default class extends React.Component {
     return { stories }
   }
   render () {
-    return <div>
+    return <Layout title="Repwact Home">
       <h1>LAST STORIES in HackerNews</h1>
       <div className="stories-container">
       { this.props.stories.map((story) => (
-        <a href={story.url} target="_blank">
-          <div className="story-container" key={story.id}>
-            <h2>{story.title}</h2>
-            <div className="story-info">
-              <p>by</p>
-              <h4>{story.user}</h4>
-              <p>in</p>
-              <h4>{story.domain}</h4>
-            </div>
+        <div className="story-container" key={story.id}>
+          <a href={story.url} target="_blank"><h2>{story.title}</h2></a>
+          <div className="story-info">
+            <p>by</p>
+            <h4>{story.user}</h4>
+            <p>in</p>
+            <h4>{story.domain}</h4>
+            <p><Link prefetch href={ `/story?id=${story.id}` }><a>
+              { story.comments_count } comments
+            </a></Link></p>  
           </div>
-        </a>
+        </div>
       )) }
       </div>
-      <h2>Made by <a href="https://twitter.com/icarlossz">@iCarlosSz</a></h2>
+      
       <style jsx>{`
-        h1 {
-          text-align: center;
-          color: #fff;
-        }
-
-        h2 {
-          text-align: center;
-          color: #fff;
-          font-size: 14px;
-        }
-
-        a {
-          text-decoration: none;
-          color: #ccc;
-        }
+        
 
         .stories-container {
           width: 85%;
@@ -80,18 +69,7 @@ export default class extends React.Component {
           margin: 0 0 15px;
         }
       `}</style>
-      <style global jsx>{`
-        * {
-          font-family: system-ui;
-          transition: .3s;
-          color: #7b7b7b;
-        }
-
-        body {
-          padding: 20px 0;
-          background-color: #f55;
-        }
-`}</style>
-    </div>
+      
+    </Layout>
   }
 }
